@@ -32,3 +32,5 @@ export enum TUserRole {
   buyer = 'buyer',
   seller = 'seller'
 }
+
+export type TRole = TUserRole.buyer | TUserRole.seller | TUserRole.superAdmin

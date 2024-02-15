@@ -1,11 +1,12 @@
 import Dashboard from "@/pages/dashboard";
-import { TUserRoutePath } from "@/types";
+import { TUserRole, TUserRoutePath } from "@/types";
 import { MdOutlineDashboard } from "react-icons/md";
 import { CiBoxes } from "react-icons/ci";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import AllProducts from "@/pages/products/AllProducts";
 import AllSales from "@/pages/sales/AllSales";
 import AddProduct from "@/pages/products/AddProduct";
+import RoleProtection from "./RoleProtection";
 
 
 export const routeList: TUserRoutePath[] = [
@@ -27,7 +28,7 @@ export const routeList: TUserRoutePath[] = [
       {
         path: '/add-product',
         title: 'Add Product',
-        element: <AddProduct />
+        element: <RoleProtection roles={[TUserRole.seller, TUserRole.superAdmin]}><AddProduct /></RoleProtection>
       }
     ]
   },
@@ -35,6 +36,6 @@ export const routeList: TUserRoutePath[] = [
     path: '/all-sales',
     title: 'Sales History',
     icon: <LiaFileInvoiceDollarSolid />,
-    element: <AllSales />
+    element: <RoleProtection roles={[TUserRole.seller, TUserRole.superAdmin]}><AllSales /></RoleProtection>
   }
 ];

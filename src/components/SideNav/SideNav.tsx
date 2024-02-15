@@ -4,9 +4,12 @@ import { IoIosArrowDown } from "react-icons/io";
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { NavLink } from 'react-router-dom';
 import sidebarItemsGenerator from '@/utils/sidebarListGenerator';
+import { useAppSelector } from '@/redux/hooks';
+import { TRole } from '@/types';
 
 export default function SideNav() {
-  const navList = sidebarItemsGenerator();
+  const { role } = useAppSelector(state => state.userInfo);
+  const navList = sidebarItemsGenerator(role as TRole);
   const [openStates, setOpenStates] = useState(new Array(navList.length).fill(true));
   const toggleDropdown = (index: number) => {
     const newOpenStates = [...openStates];

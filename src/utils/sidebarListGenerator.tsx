@@ -1,8 +1,15 @@
-import { TUserRoutePath } from "../types";
+import { routeForBuyer } from "@/router/routeForBuyer";
+import { TRole, TUserRole, TUserRoutePath } from "../types";
 import { routeList } from "@/router/routeList";
 
-function sidebarItemsGenerator() {
-  const currentRoute: TUserRoutePath[] = routeList;
+function sidebarItemsGenerator(role: TRole) {
+  let currentRoute: TUserRoutePath[] = [];
+
+  if (role === TUserRole.buyer) {
+    currentRoute = routeForBuyer
+  } else {
+    currentRoute = routeList
+  }
 
   const route = currentRoute.map(item => ({
     title: item.title,
