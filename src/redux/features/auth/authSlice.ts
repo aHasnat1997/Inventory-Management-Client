@@ -9,8 +9,11 @@ type TUserInfo = {
   email: null | string,
   phone: null | string,
   userImg: null | string,
+  role: null | string,
   isActive: null | boolean,
-  token: null | string
+  token: null | {
+    access: string
+  }
 }
 
 const initialState: TUserInfo = {
@@ -22,6 +25,7 @@ const initialState: TUserInfo = {
   email: null,
   phone: null,
   userImg: null,
+  role: null,
   isActive: null,
   token: null
 }
@@ -31,7 +35,7 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action) => {
-      const { id, username, email, phone, userImg, isActive, token } = action.payload;
+      const { id, username, email, phone, userImg, role, isActive, token } = action.payload;
       state.id = id;
       state.username = {
         firstName: username.firstName,
@@ -40,6 +44,7 @@ export const authSlice = createSlice({
       state.email = email;
       state.phone = phone;
       state.userImg = userImg;
+      state.role = role;
       state.isActive = isActive;
       state.token = token;
     },
@@ -52,6 +57,7 @@ export const authSlice = createSlice({
       state.email = null;
       state.phone = null;
       state.userImg = null;
+      state.role = null;
       state.isActive = null;
       state.token = null;
     }

@@ -19,7 +19,7 @@ import DeleteDialog from "@/components/DeleteProduct/DeleteDialog";
 export default function AllProducts() {
   const [query, setQuery] = useState<string>('');
   const [deleteIds, setDeleteIds] = useState<string[]>([]);
-  const { data: productData } = useGetAllProductsQuery(query, { pollingInterval: 10000, skipPollingIfUnfocused: true });
+  const { data: productData } = useGetAllProductsQuery(query);
 
   /**
    * Function for select and deselect id

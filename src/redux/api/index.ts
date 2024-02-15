@@ -1,11 +1,21 @@
 import { createApi, fetchBaseQuery, } from "@reduxjs/toolkit/query/react";
+import { RootState } from "../store";
+
+const baseQuery = fetchBaseQuery({
+  baseUrl: import.meta.env.VITE_BASE_API_URL,
+  credentials: 'include',
+  prepareHeaders: (headers, { getState }) => {
+    const token = (getState() as RootState).userInfo.token?.access
+    if (token) {
+      headers.set('authorization', token)
+    }
+    return headers;
+  }
+})
 
 export const baseApi = createApi({
   reducerPath: 'baseApi',
-  baseQuery: fetchBaseQuery({
-    // baseUrl: import.meta.env.VITE_BASE_API_URL,
-    baseUrl: 'https://store-management-server-kohl.vercel.app/api/v1',
-    credentials: 'include',
-  }),
+  baseQuery,
+  tagTypes: ['categories', 'products', 'sales'],
   endpoints: () => ({})
 });

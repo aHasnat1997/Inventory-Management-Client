@@ -6,7 +6,8 @@ const categoryApi = baseApi.injectEndpoints({
       query: () => ({
         url: '/categories',
         method: 'GET'
-      })
+      }),
+      providesTags: ['categories']
     })
   })
 })

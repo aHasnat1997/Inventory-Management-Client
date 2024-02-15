@@ -26,3 +26,9 @@ export type TProduct = {
   availability: 'in-stock' | 'pre-order' | 'up-coming',
   specification?: object
 }
+
+export enum TUserRole {
+  superAdmin = 'superAdmin',
+  buyer = 'buyer',
+  seller = 'seller'
+}

@@ -52,7 +52,7 @@ const formSchema = z.object({
 export default function AddProduct() {
   const [addProduct] = useAddProductMutation();
   const { toast } = useToast();
-  const { data: categoriesData } = useGetAllCategoriesQuery('', { pollingInterval: 30000, skipPollingIfUnfocused: true });
+  const { data: categoriesData } = useGetAllCategoriesQuery('');
   // console.log(categoriesData);
 
 

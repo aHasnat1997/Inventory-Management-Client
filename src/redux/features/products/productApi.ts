@@ -1,8 +1,6 @@
 import { baseApi } from "@/redux/api";
 
-const productApiWithTag = baseApi.enhanceEndpoints({ addTagTypes: ['products'] });
-
-const productApi = productApiWithTag.injectEndpoints({
+const productApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllProducts: builder.query({
       query: (filterData) => ({
@@ -24,7 +22,7 @@ const productApi = productApiWithTag.injectEndpoints({
         method: 'POST',
         body: productInfo
       }),
-      invalidatesTags: ['products']
+      invalidatesTags: ['products', 'categories']
     }),
     updateProduct: builder.mutation({
       query: ({ id, productInfo }) => ({

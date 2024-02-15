@@ -1,17 +1,13 @@
 import { baseApi } from "@/redux/api";
 
-const saleApiWithTag = baseApi.enhanceEndpoints({
-  addTagTypes: ['sale']
-})
-
-const salesApi = saleApiWithTag.injectEndpoints({
+const salesApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getAllSales: builder.query({
       query: (filterData) => ({
         url: `/sale/all?${filterData}`,
         method: 'GET'
       }),
-      providesTags: ['sale']
+      providesTags: ['sales']
     }),
     addSale: builder.mutation({
       query: (saleData) => ({
@@ -19,7 +15,7 @@ const salesApi = saleApiWithTag.injectEndpoints({
         method: 'POST',
         body: saleData
       }),
-      invalidatesTags: ['sale']
+      invalidatesTags: ['sales']
     })
   })
 })

@@ -58,6 +58,7 @@ export default function LoginFrom() {
           email: info.user.email,
           phone: info.user.phone,
           userImg: info.user.userImg,
+          role: info.user.role,
           isActive: info.user.isActive,
           token: info.token,
         }))
