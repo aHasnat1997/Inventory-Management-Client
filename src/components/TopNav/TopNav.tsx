@@ -1,7 +1,10 @@
 import { IoSearchOutline } from "react-icons/io5";
-import AvatarDropdownMenu from "../AvatarDropdownMenu/AvatarDropdownMenu";
+import { Avatar, AvatarImage } from "../ui/avatar";
+import { useAppSelector } from "@/redux/hooks";
 
 export default function TopNav() {
+  const userInfo = useAppSelector(state => state.userInfo);
+
   return (
     <nav className="w-full py-4 px-16 bg-accent flex justify-between items-center shadow-lg">
       <div className="w-1/3 flex items-center relative">
@@ -13,7 +16,17 @@ export default function TopNav() {
         />
       </div>
       <div className="flex items-center gap-4">
-        <AvatarDropdownMenu />
+        <Avatar className="cursor-pointer">
+          {/* <AvatarImage src="https://github.com/shadcn.png" alt="@shadcn" /> */}
+          {
+            userInfo.userImg ?
+              <AvatarImage src={userInfo.userImg} alt="user image" /> :
+              <div className="size-10 rounded-full bg-primary flex items-center justify-center font-bold">
+                {userInfo.username.firstName?.charAt(0)}
+                {userInfo.username.lastName?.charAt(0)}
+              </div>
+          }
+        </Avatar>
       </div>
     </nav>
   )

@@ -6,6 +6,11 @@ import { NavLink } from 'react-router-dom';
 import sidebarItemsGenerator from '@/utils/sidebarListGenerator';
 import { useAppSelector } from '@/redux/hooks';
 import { TRole } from '@/types';
+import { Button } from '../ui/button';
+import { LogOut } from 'lucide-react';
+import { useAppDispatch } from "@/redux/hooks";
+import { logOut } from "@/redux/features/auth/authSlice";
+import { persistor } from "@/redux/store";
 
 export default function SideNav() {
   const { role } = useAppSelector(state => state.userInfo);
@@ -16,16 +21,23 @@ export default function SideNav() {
     newOpenStates[index] = !newOpenStates[index];
     setOpenStates(newOpenStates);
   };
+  const dispatch = useAppDispatch();
 
   const navStyle = 'rounded-lg px-6 py-3 cursor-pointer duration-200 active:scale-95 hover:bg-accent';
+
+  const handelLogout = () => {
+    dispatch(logOut())
+    localStorage.clear();
+    persistor.purge();
+  }
 
   return (
     <section className='p-2'>
       <div>
         <img src={logo} alt="logo" />
       </div>
-      <div className='mt-12'>
-        <ScrollArea className='w-full h-[75vh] text-white'>
+      <div className='mt-12 h-[75vh]'>
+        <ScrollArea className='w-full h-[95%] text-white border-b'>
           {navList.map((item, i) => (
             <div key={i} className='w-full text-xl font-bold duration-300'>
               {!item.children ? (
@@ -64,6 +76,15 @@ export default function SideNav() {
             </div>
           ))}
         </ScrollArea>
+        <div className='py-4'>
+          <Button
+            className='w-full'
+            onClick={handelLogout}
+          >
+            <LogOut className="mr-2 h-4 w-4" />
+            <span>Log out</span>
+          </Button>
+        </div>
       </div>
     </section>
   );
