@@ -1,14 +1,17 @@
 import { routeForBuyer } from "@/router/routeForBuyer";
 import { TRole, TUserRole, TUserRoutePath } from "../types";
-import { routeList } from "@/router/routeList";
+import { routeForSeller } from "@/router/routeForSeller";
+import { routeForSuperAdmin } from "@/router/routeForSuperAdmin";
 
 function sidebarItemsGenerator(role: TRole) {
   let currentRoute: TUserRoutePath[] = [];
 
   if (role === TUserRole.buyer) {
     currentRoute = routeForBuyer
-  } else {
-    currentRoute = routeList
+  } else if (role === TUserRole.seller) {
+    currentRoute = routeForSeller
+  } else if (role === TUserRole.superAdmin) {
+    currentRoute = routeForSuperAdmin
   }
 
   const route = currentRoute.map(item => ({

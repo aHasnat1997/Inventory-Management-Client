@@ -9,7 +9,7 @@ import { GrServices } from "react-icons/gr";
 import AllSales from "@/pages/sales/AllSales";
 import AddProduct from "@/pages/products/AddProduct";
 
-export const routeForBuyer: TUserRoutePath[] = [
+export const routeForSuperAdmin: TUserRoutePath[] = [
   {
     path: '/',
     title: 'Dashboard',
@@ -17,32 +17,31 @@ export const routeForBuyer: TUserRoutePath[] = [
     element: <Dashboard />
   },
   {
-    path: '/all-products',
     title: 'Products',
     icon: <CiBoxes />,
-    element: <RoleProtection roles={[TUserRole.buyer, TUserRole.seller, TUserRole.superAdmin]}><AllProducts /></RoleProtection>,
-  },
-  {
-    path: '/my-orders',
-    title: 'Order History',
-    icon: <LiaFileInvoiceDollarSolid />,
-    element: <RoleProtection roles={[TUserRole.buyer]}><AllSales /></RoleProtection>
-  },
-  {
-    path: '/my-servicing',
-    title: 'Servicing',
-    icon: <GrServices />,
     children: [
       {
-        path: '/my-servicing',
-        title: 'My Servicing',
-        element: <RoleProtection roles={[TUserRole.buyer]}><AllProducts /></RoleProtection>
+        path: '/all-products',
+        title: 'All Products',
+        element: <RoleProtection roles={[TUserRole.buyer, TUserRole.seller, TUserRole.superAdmin]}><AllProducts /></RoleProtection>
       },
       {
-        path: '/add-servicing',
-        title: 'Add servicing',
-        element: <RoleProtection roles={[TUserRole.buyer]}><AddProduct /></RoleProtection>
+        path: '/add-product',
+        title: 'Add Product',
+        element: <RoleProtection roles={[TUserRole.seller, TUserRole.superAdmin]}><AddProduct /></RoleProtection>
       }
     ]
+  },
+  {
+    path: '/all-sales',
+    title: 'Sales History',
+    icon: <LiaFileInvoiceDollarSolid />,
+    element: <RoleProtection roles={[TUserRole.seller, TUserRole.superAdmin]}><AllSales /></RoleProtection>
+  },
+  {
+    path: '/all-servicing',
+    title: 'Servicing',
+    icon: <GrServices />,
+    element: <RoleProtection roles={[TUserRole.seller, TUserRole.superAdmin]}><AllProducts /></RoleProtection>
   }
 ];

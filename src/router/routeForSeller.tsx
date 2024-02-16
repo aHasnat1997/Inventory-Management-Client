@@ -1,15 +1,15 @@
-import Dashboard from "@/pages/dashboard";
 import { TUserRole, TUserRoutePath } from "@/types";
+import RoleProtection from "./RoleProtection";
 import { MdOutlineDashboard } from "react-icons/md";
+import Dashboard from "@/pages/dashboard";
 import { CiBoxes } from "react-icons/ci";
-import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import AllProducts from "@/pages/products/AllProducts";
+import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
+import { GrServices } from "react-icons/gr";
 import AllSales from "@/pages/sales/AllSales";
 import AddProduct from "@/pages/products/AddProduct";
-import RoleProtection from "./RoleProtection";
 
-
-export const routeList: TUserRoutePath[] = [
+export const routeForSeller: TUserRoutePath[] = [
   {
     path: '/',
     title: 'Dashboard',
@@ -23,7 +23,7 @@ export const routeList: TUserRoutePath[] = [
       {
         path: '/all-products',
         title: 'All Products',
-        element: <AllProducts />
+        element: <RoleProtection roles={[TUserRole.buyer, TUserRole.seller, TUserRole.superAdmin]}><AllProducts /></RoleProtection>
       },
       {
         path: '/add-product',
@@ -37,5 +37,11 @@ export const routeList: TUserRoutePath[] = [
     title: 'Sales History',
     icon: <LiaFileInvoiceDollarSolid />,
     element: <RoleProtection roles={[TUserRole.seller, TUserRole.superAdmin]}><AllSales /></RoleProtection>
+  },
+  {
+    path: '/all-servicing',
+    title: 'Servicing',
+    icon: <GrServices />,
+    element: <RoleProtection roles={[TUserRole.seller, TUserRole.superAdmin]}><AllProducts /></RoleProtection>
   }
 ];

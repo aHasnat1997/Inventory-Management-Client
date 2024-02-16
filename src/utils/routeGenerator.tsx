@@ -1,11 +1,14 @@
-import { routeList } from "@/router/routeList";
+import { routeForBuyer } from "@/router/routeForBuyer";
 import { TRoute, TUserRoutePath } from "../types";
+import { routeForSeller } from "@/router/routeForSeller";
+import { routeForSuperAdmin } from "@/router/routeForSuperAdmin";
 
 
 function routeGenerator() {
-  const currentRoute: TUserRoutePath[] = routeList;
+  const allRoutes: TUserRoutePath[] = [];
+  allRoutes.push(...routeForBuyer, ...routeForSeller, ...routeForSuperAdmin);
 
-  const route = currentRoute.reduce((acc: TRoute[], item) => {
+  const route = allRoutes.reduce((acc: TRoute[], item) => {
     if (item.path && item.element) {
       acc.push({
         path: item.path,
