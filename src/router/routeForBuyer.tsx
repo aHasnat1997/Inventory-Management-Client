@@ -6,8 +6,9 @@ import { CiBoxes } from "react-icons/ci";
 import AllProducts from "@/pages/products/AllProducts";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { GrServices } from "react-icons/gr";
-import AddProduct from "@/pages/products/AddProduct";
 import MyOrders from "@/pages/sales/MyOrders";
+import MyServicing from "@/pages/servicing/MyServicing";
+import AddServicing from "@/pages/servicing/AddServicing";
 
 export const routeForBuyer: TUserRoutePath[] = [
   {
@@ -36,12 +37,12 @@ export const routeForBuyer: TUserRoutePath[] = [
       {
         path: '/my-servicing',
         title: 'My Servicing',
-        element: <RoleProtection roles={[TUserRole.buyer]}><AllProducts /></RoleProtection>
+        element: <RoleProtection roles={[TUserRole.buyer]}><MyServicing /></RoleProtection>
       },
       {
         path: '/add-servicing',
         title: 'Add servicing',
-        element: <RoleProtection roles={[TUserRole.buyer]}><AddProduct /></RoleProtection>
+        element: <RoleProtection roles={[TUserRole.buyer]}><AddServicing /></RoleProtection>
       }
     ]
   }

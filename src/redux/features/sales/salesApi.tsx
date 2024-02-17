@@ -11,7 +11,7 @@ const salesApi = baseApi.injectEndpoints({
     }),
     getMyOrders: builder.query({
       query: (filterData) => ({
-        url: `sale/my-sale?${filterData}`,
+        url: `/sale/my-sale?${filterData}`,
         method: 'GET'
       }),
       providesTags: ['sales']

@@ -1,4 +1,3 @@
-import { useGetMyOrdersQuery } from "@/redux/features/sales/salesApi";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
@@ -11,43 +10,45 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ReactNode, useState } from "react";
+import { useGetMyServicingQuery } from "@/redux/features/servicing/servicingApi";
 import { FaEye } from "react-icons/fa";
 
-export default function MyOrders() {
+export default function MyServicing() {
   const [query, setQuery] = useState<string>('');
-  const { data: orderData, isFetching } = useGetMyOrdersQuery(query);
+  const { data: servicingData, isFetching } = useGetMyServicingQuery(query);
+  // console.log(servicingData);
 
   return (
     <section>
       <div className="w-full py-4 flex items-center justify-between">
         <div>
-          <h2 className="text-4xl font-semibold italic">My Orders</h2>
+          <h2 className="text-4xl font-semibold italic">All Servicing</h2>
         </div>
       </div>
       <ScrollArea className='w-full h-[75vh]'>
         {
           isFetching ? <div>Loading...</div> :
-            !orderData || orderData.doc.length === 0 ?
+            !servicingData || servicingData.doc.length === 0 ?
               <h1 className="text-4xl text-center">No Data Found</h1> :
               <Table>
                 <TableCaption></TableCaption>
                 <TableHeader>
                   <TableRow>
-                    <TableHead>Product Name</TableHead>
-                    <TableHead>Price</TableHead>
-                    <TableHead>Quantity</TableHead>
+                    <TableHead>Servicing Part</TableHead>
+                    <TableHead>Preferred Date</TableHead>
+                    <TableHead>Servicing Status</TableHead>
                     <TableHead>Created At</TableHead>
                     <TableHead></TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {
-                    orderData?.doc?.map((data: Record<string, ReactNode>) => <TableRow
+                    servicingData?.doc?.map((data: Record<string, ReactNode>) => <TableRow
                       key={data._id as number}
                     >
-                      <TableCell>{data?.productName}</TableCell>
-                      <TableCell>$ {data?.price}</TableCell>
-                      <TableCell>{data?.quantity}</TableCell>
+                      <TableCell>{data?.servicingPart}</TableCell>
+                      <TableCell>{data?.preferredDate}</TableCell>
+                      <TableCell>{data?.isServicingDone ? 'Complete' : 'Pending'}</TableCell>
                       <TableCell>{new Date(data?.createdAt as string).toDateString()}</TableCell>
                       <TableCell className="text-right">
                         <Button
@@ -63,18 +64,18 @@ export default function MyOrders() {
               </Table>
         }
       </ScrollArea>
-      <div className={`flex justify-between ${orderData?.meta?.limit >= 10 ? 'block ' : 'hidden'}`}>
+      <div className={`flex justify-between ${servicingData?.meta?.limit >= 10 ? 'block ' : 'hidden'}`}>
         <Button
           variant={'outline'}
-          className={`underline hover:text-white ${orderData?.meta?.page === 1 ? 'opacity-20' : ''}`}
-          onClick={() => setQuery(`page=${orderData?.meta?.page === 1 ? orderData?.meta.page : orderData?.meta?.page - 1}`)}
+          className={`underline hover:text-white ${servicingData?.meta?.page === 1 ? 'opacity-20' : ''}`}
+          onClick={() => setQuery(`page=${servicingData?.meta?.page === 1 ? servicingData?.meta.page : servicingData?.meta?.page - 1}`)}
         >
           Previous
         </Button>
         <Button
           variant={'outline'}
-          className={`underline hover:text-white ${orderData?.meta?.totalPage === orderData?.meta?.page ? 'opacity-20' : ''}`}
-          onClick={() => setQuery(`page=${orderData.meta.totalPage !== orderData.meta.page ? orderData.meta.page + 1 : orderData.meta.totalPage}`)}
+          className={`underline hover:text-white ${servicingData?.meta?.totalPage === servicingData?.meta?.page ? 'opacity-20' : ''}`}
+          onClick={() => setQuery(`page=${servicingData.meta.totalPage !== servicingData.meta.page ? servicingData.meta.page + 1 : servicingData.meta.totalPage}`)}
         >
           Next
         </Button>

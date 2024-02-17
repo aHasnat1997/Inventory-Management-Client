@@ -11,8 +11,6 @@ type TRoleProtection = {
 export default function RoleProtection({ children, roles }: TRoleProtection) {
   const { token } = useAppSelector(state => state.userInfo);
   const { role } = verifyToken(token?.access as string);
-  console.log(role);
-
 
   if (roles && !roles.includes(role as TRole)) {
     return <Navigate to='/demo-page' replace={true} />

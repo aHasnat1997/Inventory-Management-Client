@@ -22,7 +22,7 @@ const authApi = baseApi.injectEndpoints({
         method: 'POST',
         body: value
       }),
-      invalidatesTags: ['sales']
+      invalidatesTags: ['sales', 'servicing']
     }),
   })
 });
