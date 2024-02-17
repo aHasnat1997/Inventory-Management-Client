@@ -11,9 +11,12 @@ import { LogOut } from 'lucide-react';
 import { useAppDispatch } from "@/redux/hooks";
 import { logOut } from "@/redux/features/auth/authSlice";
 import { persistor } from "@/redux/store";
+import { useLogoutMutation } from '@/redux/features/auth/authApi';
+import { verifyToken } from '@/utils/verifyToken';
 
 export default function SideNav() {
-  const { role } = useAppSelector(state => state.userInfo);
+  const { token } = useAppSelector(state => state.userInfo);
+  const { role } = verifyToken(token?.access as string);
   const navList = sidebarItemsGenerator(role as TRole);
   const [openStates, setOpenStates] = useState(new Array(navList.length).fill(true));
   const toggleDropdown = (index: number) => {
@@ -21,12 +24,14 @@ export default function SideNav() {
     newOpenStates[index] = !newOpenStates[index];
     setOpenStates(newOpenStates);
   };
+  const [userLogout] = useLogoutMutation();
   const dispatch = useAppDispatch();
 
   const navStyle = 'rounded-lg px-6 py-3 cursor-pointer duration-200 active:scale-95 hover:bg-accent';
 
-  const handelLogout = () => {
+  const handelLogout = async () => {
     dispatch(logOut())
+    await userLogout({})
     localStorage.clear();
     persistor.purge();
   }
