@@ -21,7 +21,8 @@ const authApi = baseApi.injectEndpoints({
         url: '/user/logout',
         method: 'POST',
         body: value
-      })
+      }),
+      invalidatesTags: ['sales']
     }),
   })
 });

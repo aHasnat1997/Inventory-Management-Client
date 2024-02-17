@@ -6,8 +6,8 @@ import { CiBoxes } from "react-icons/ci";
 import AllProducts from "@/pages/products/AllProducts";
 import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { GrServices } from "react-icons/gr";
-import AllSales from "@/pages/sales/AllSales";
 import AddProduct from "@/pages/products/AddProduct";
+import MyOrders from "@/pages/sales/MyOrders";
 
 export const routeForBuyer: TUserRoutePath[] = [
   {
@@ -26,7 +26,7 @@ export const routeForBuyer: TUserRoutePath[] = [
     path: '/my-orders',
     title: 'Order History',
     icon: <LiaFileInvoiceDollarSolid />,
-    element: <RoleProtection roles={[TUserRole.buyer]}><AllSales /></RoleProtection>
+    element: <RoleProtection roles={[TUserRole.buyer]}><MyOrders /></RoleProtection>
   },
   {
     path: '/my-servicing',

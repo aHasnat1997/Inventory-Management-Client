@@ -9,6 +9,13 @@ const salesApi = baseApi.injectEndpoints({
       }),
       providesTags: ['sales']
     }),
+    getMyOrders: builder.query({
+      query: (filterData) => ({
+        url: `sale/my-sale?${filterData}`,
+        method: 'GET'
+      }),
+      providesTags: ['sales']
+    }),
     addSale: builder.mutation({
       query: (saleData) => ({
         url: '/sale/create',
@@ -20,4 +27,4 @@ const salesApi = baseApi.injectEndpoints({
   })
 })
 
-export const { useGetAllSalesQuery, useAddSaleMutation } = salesApi;
+export const { useGetAllSalesQuery, useGetMyOrdersQuery, useAddSaleMutation } = salesApi;
