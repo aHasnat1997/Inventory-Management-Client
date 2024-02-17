@@ -8,6 +8,7 @@ import { LiaFileInvoiceDollarSolid } from "react-icons/lia";
 import { GrServices } from "react-icons/gr";
 import AllSales from "@/pages/sales/AllSales";
 import AddProduct from "@/pages/products/AddProduct";
+import AllServicing from "@/pages/servicing/AllServicing";
 
 export const routeForSuperAdmin: TUserRoutePath[] = [
   {
@@ -42,6 +43,6 @@ export const routeForSuperAdmin: TUserRoutePath[] = [
     path: '/all-servicing',
     title: 'Servicing',
     icon: <GrServices />,
-    element: <RoleProtection roles={[TUserRole.seller, TUserRole.superAdmin]}><AllProducts /></RoleProtection>
+    element: <RoleProtection roles={[TUserRole.seller, TUserRole.superAdmin]}><AllServicing /></RoleProtection>
   }
 ];

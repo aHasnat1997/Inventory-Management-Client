@@ -11,6 +11,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { ReactNode, useState } from "react";
+import { FaEye } from "react-icons/fa";
 
 export default function AllSales() {
   const [query, setQuery] = useState<string>('');
@@ -36,7 +37,7 @@ export default function AllSales() {
                   <TableHead>Price</TableHead>
                   <TableHead>Quantity</TableHead>
                   <TableHead>Created At</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
+                  <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -50,7 +51,12 @@ export default function AllSales() {
                     <TableCell>{data?.quantity}</TableCell>
                     <TableCell>{new Date(data?.createdAt as string).toDateString()}</TableCell>
                     <TableCell className="text-right">
-                      <Button>Action</Button>
+                      <Button
+                        variant={'ghost'}
+                        className="text-2xl hover:text-white"
+                      >
+                        <FaEye />
+                      </Button>
                     </TableCell>
                   </TableRow>)
                 }

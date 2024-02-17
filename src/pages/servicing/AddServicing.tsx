@@ -62,7 +62,7 @@ export default function AddServicing() {
       if ('data' in result) {
         toast({
           title: 'Success',
-          description: 'Product create Success 👍',
+          description: 'Servicing request Success 👍',
           duration: 2000,
         });
       } else if ('error' in result) {
@@ -174,7 +174,7 @@ export default function AddServicing() {
                 type="submit"
                 className="border border-gray-300"
               >
-                Create
+                Service request
               </Button>
             </div>
           </form>
