@@ -17,12 +17,14 @@ import ProductSale from "@/components/ProductModals/ProductSale";
 import DeleteDialog from "@/components/DeleteProduct/DeleteDialog";
 import { useAppSelector } from "@/redux/hooks";
 import { TUserRole } from "@/types";
+import TableSkeleton from "@/components/Loader/TableSkeleton";
 
 export default function AllProducts() {
   const { role: userRole, id: userId, username } = useAppSelector((state) => state.userInfo);
   const [query, setQuery] = useState<string>('');
   const [deleteIds, setDeleteIds] = useState<string[]>([]);
-  const { data: productData } = useGetAllProductsQuery(query);
+  const { data: productData, isFetching } = useGetAllProductsQuery(query);
+  const loadingArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   /**
    * Function for select and deselect id
@@ -54,57 +56,58 @@ export default function AllProducts() {
       </div>
       <ScrollArea className='w-full h-[75vh]'>
         {
-          !productData || productData.doc.length === 0 ?
-            <h1 className="text-4xl text-center">No Data Found</h1> :
-            <Table>
-              <TableCaption></TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[10px]"></TableHead>
-                  <TableHead>Product Name</TableHead>
-                  <TableHead>Availability</TableHead>
-                  <TableHead>Quantity</TableHead>
-                  <TableHead>Amount</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {
-                  productData?.doc?.map((data: Record<string, ReactNode>) => <TableRow
-                    key={data._id as string}
-                  >
-                    <TableCell>
-                      <input
-                        id={data._id as string}
-                        type="checkbox"
-                        onChange={() => idsFromCheckboxFun(data._id as string)}
-                      />
-                    </TableCell>
-                    <TableCell>
-                      <label
-                        htmlFor={data._id as string}
-                      >
-                        {data?.productName}
-                      </label>
-                    </TableCell>
-                    <TableCell>{data?.availability}</TableCell>
-                    <TableCell>{data?.quantity}</TableCell>
-                    <TableCell>$ {data?.price}</TableCell>
-                    <TableCell className="w-[13rem] text-right">
-                      <ViewProduct id={data?._id as string} userRole={userRole as string} />
-                      {userRole === TUserRole.buyer ? <ProductSale
-                        id={data?._id as string}
-                        userId={userId as string}
-                        firstName={username.firstName as string}
-                        lastName={username.lastName as string}
-                        productName={data?.productName as string}
-                        price={data?.price as number}
-                      /> : <></>}
-                    </TableCell>
-                  </TableRow>)
-                }
-              </TableBody>
-            </Table>
+          isFetching ? loadingArray.map(i => <TableSkeleton key={i} />) :
+            !productData || productData.doc.length === 0 ?
+              <h1 className="text-4xl text-center">No Data Found</h1> :
+              <Table>
+                <TableCaption></TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[10px]"></TableHead>
+                    <TableHead>Product Name</TableHead>
+                    <TableHead>Availability</TableHead>
+                    <TableHead>Quantity</TableHead>
+                    <TableHead>Amount</TableHead>
+                    <TableHead></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {
+                    productData?.doc?.map((data: Record<string, ReactNode>) => <TableRow
+                      key={data._id as string}
+                    >
+                      <TableCell>
+                        <input
+                          id={data._id as string}
+                          type="checkbox"
+                          onChange={() => idsFromCheckboxFun(data._id as string)}
+                        />
+                      </TableCell>
+                      <TableCell>
+                        <label
+                          htmlFor={data._id as string}
+                        >
+                          {data?.productName}
+                        </label>
+                      </TableCell>
+                      <TableCell>{data?.availability}</TableCell>
+                      <TableCell>{data?.quantity}</TableCell>
+                      <TableCell>$ {data?.price}</TableCell>
+                      <TableCell className="w-[13rem] text-right">
+                        <ViewProduct id={data?._id as string} userRole={userRole as string} />
+                        {userRole === TUserRole.buyer ? <ProductSale
+                          id={data?._id as string}
+                          userId={userId as string}
+                          firstName={username.firstName as string}
+                          lastName={username.lastName as string}
+                          productName={data?.productName as string}
+                          price={data?.price as number}
+                        /> : <></>}
+                      </TableCell>
+                    </TableRow>)
+                  }
+                </TableBody>
+              </Table>
         }
       </ScrollArea>
       <div className={`flex justify-between ${productData?.meta?.limit >= 10 ? 'block ' : 'hidden'}`}>

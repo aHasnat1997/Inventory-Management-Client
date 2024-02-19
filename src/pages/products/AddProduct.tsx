@@ -34,6 +34,7 @@ import { cn } from "@/lib/utils"
 import { Check } from "lucide-react";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
 import { Checkbox } from "@/components/ui/checkbox";
+import { useEffect } from "react";
 
 
 const formSchema = z.object({
@@ -50,10 +51,18 @@ const formSchema = z.object({
 });
 
 export default function AddProduct() {
-  const [addProduct] = useAddProductMutation();
+  const [addProduct, { isLoading }] = useAddProductMutation();
   const { toast } = useToast();
   const { data: categoriesData } = useGetAllCategoriesQuery('');
   // console.log(categoriesData);
+
+  useEffect(() => {
+    if (isLoading) {
+      toast({
+        title: 'Adding Product Processing...'
+      });
+    }
+  }, [isLoading, toast]);
 
 
   const compatibilityOption = [

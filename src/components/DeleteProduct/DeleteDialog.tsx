@@ -7,7 +7,9 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { useDeleteProductMutation } from "@/redux/features/products/productApi";
+import { useEffect } from "react";
 import { RiDeleteBinFill } from "react-icons/ri";
+import { useToast } from "../ui/use-toast";
 
 /**
  * Product delete Dialog
@@ -15,7 +17,28 @@ import { RiDeleteBinFill } from "react-icons/ri";
  * @returns Dialog for confirmation
  */
 export default function DeleteDialog({ deleteIdArray, emptyArray }: { deleteIdArray: string[], emptyArray: React.Dispatch<React.SetStateAction<string[]>> }) {
-  const [deleteProduct] = useDeleteProductMutation();
+  const [deleteProduct, { isLoading }] = useDeleteProductMutation();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (isLoading) {
+      toast({
+        title: 'Update Processing...'
+      });
+    }
+  }, [isLoading, toast]);
+
+  const handleDelete = async () => {
+    const result = await deleteProduct(deleteIdArray);
+    if (result) {
+      emptyArray([])
+      toast({
+        title: 'Success',
+        description: 'Product update Success 👍',
+        duration: 2000,
+      });
+    }
+  }
 
   return (
     <Dialog>
@@ -45,10 +68,7 @@ export default function DeleteDialog({ deleteIdArray, emptyArray }: { deleteIdAr
             </Button>
           </DialogClose>
           <DialogClose asChild>
-            <Button variant={'destructive'} onClick={() => {
-              deleteProduct(deleteIdArray)
-              emptyArray([])
-            }}>
+            <Button variant={'destructive'} onClick={handleDelete}>
               <div className="flex items-center gap-2 ">
                 <RiDeleteBinFill />
                 <span className="text-base">Delete</span>

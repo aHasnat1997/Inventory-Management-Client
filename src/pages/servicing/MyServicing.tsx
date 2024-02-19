@@ -12,10 +12,12 @@ import {
 import { ReactNode, useState } from "react";
 import { useGetMyServicingQuery } from "@/redux/features/servicing/servicingApi";
 import { FaEye } from "react-icons/fa";
+import TableSkeleton from "@/components/Loader/TableSkeleton";
 
 export default function MyServicing() {
   const [query, setQuery] = useState<string>('');
   const { data: servicingData, isFetching } = useGetMyServicingQuery(query);
+  const loadingArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
   // console.log(servicingData);
 
   return (
@@ -27,7 +29,7 @@ export default function MyServicing() {
       </div>
       <ScrollArea className='w-full h-[75vh]'>
         {
-          isFetching ? <div>Loading...</div> :
+          isFetching ? loadingArray.map(i => <TableSkeleton key={i} />) :
             !servicingData || servicingData.doc.length === 0 ?
               <h1 className="text-4xl text-center">No Data Found</h1> :
               <Table>

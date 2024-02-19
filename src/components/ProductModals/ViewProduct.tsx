@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { TUserRole } from "@/types";
@@ -46,9 +46,17 @@ const formSchema = z.object({
 export default function ViewProduct({ id, userRole }: { id: string, userRole: string }) {
   const [productId, setProductId] = useState('');
   const { data: productData } = useGetSingleProductsQuery(id);
-  const [updateProduct] = useUpdateProductMutation();
+  const [updateProduct, { isLoading }] = useUpdateProductMutation();
   const { toast } = useToast();
   const [isEdit, setIsEdit] = useState(false);
+
+  useEffect(() => {
+    if (isLoading) {
+      toast({
+        title: 'Update Processing...'
+      });
+    }
+  }, [isLoading, toast]);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

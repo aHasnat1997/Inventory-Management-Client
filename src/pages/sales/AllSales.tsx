@@ -12,10 +12,12 @@ import {
 } from "@/components/ui/table";
 import { ReactNode, useState } from "react";
 import { FaEye } from "react-icons/fa";
+import TableSkeleton from "@/components/Loader/TableSkeleton";
 
 export default function AllSales() {
   const [query, setQuery] = useState<string>('');
-  const { data: salesData } = useGetAllSalesQuery(query);
+  const { data: salesData, isFetching } = useGetAllSalesQuery(query);
+  const loadingArray = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
   return (
     <section>
@@ -26,42 +28,43 @@ export default function AllSales() {
       </div>
       <ScrollArea className='w-full h-[75vh]'>
         {
-          !salesData || salesData.doc.length === 0 ?
-            <h1 className="text-4xl text-center">No Data Found</h1> :
-            <Table>
-              <TableCaption></TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Product Name</TableHead>
-                  <TableHead>Buyer Name</TableHead>
-                  <TableHead>Price</TableHead>
-                  <TableHead>Quantity</TableHead>
-                  <TableHead>Created At</TableHead>
-                  <TableHead></TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {
-                  salesData?.doc?.map((data: Record<string, ReactNode>) => <TableRow
-                    key={data._id as number}
-                  >
-                    <TableCell>{data?.productName}</TableCell>
-                    <TableCell>{data?.buyerName}</TableCell>
-                    <TableCell>$ {data?.price}</TableCell>
-                    <TableCell>{data?.quantity}</TableCell>
-                    <TableCell>{new Date(data?.createdAt as string).toDateString()}</TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant={'ghost'}
-                        className="text-2xl hover:text-white"
-                      >
-                        <FaEye />
-                      </Button>
-                    </TableCell>
-                  </TableRow>)
-                }
-              </TableBody>
-            </Table>
+          isFetching ? loadingArray.map(i => <TableSkeleton key={i} />) :
+            !salesData || salesData.doc.length === 0 ?
+              <h1 className="text-4xl text-center">No Data Found</h1> :
+              <Table>
+                <TableCaption></TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Product Name</TableHead>
+                    <TableHead>Buyer Name</TableHead>
+                    <TableHead>Price</TableHead>
+                    <TableHead>Quantity</TableHead>
+                    <TableHead>Created At</TableHead>
+                    <TableHead></TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {
+                    salesData?.doc?.map((data: Record<string, ReactNode>) => <TableRow
+                      key={data._id as number}
+                    >
+                      <TableCell>{data?.productName}</TableCell>
+                      <TableCell>{data?.buyerName}</TableCell>
+                      <TableCell>$ {data?.price}</TableCell>
+                      <TableCell>{data?.quantity}</TableCell>
+                      <TableCell>{new Date(data?.createdAt as string).toDateString()}</TableCell>
+                      <TableCell className="text-right">
+                        <Button
+                          variant={'ghost'}
+                          className="text-2xl hover:text-white"
+                        >
+                          <FaEye />
+                        </Button>
+                      </TableCell>
+                    </TableRow>)
+                  }
+                </TableBody>
+              </Table>
         }
       </ScrollArea>
       <div className={`flex justify-between ${salesData?.meta?.limit >= 10 ? 'block ' : 'hidden'}`}>

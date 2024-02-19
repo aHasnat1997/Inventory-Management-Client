@@ -24,6 +24,7 @@ import { useAppSelector } from "@/redux/hooks";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { CalendarIcon } from "lucide-react";
+import { useEffect } from "react";
 
 
 const formSchema = z.object({
@@ -34,9 +35,16 @@ const formSchema = z.object({
 
 export default function AddServicing() {
   const { id: userId } = useAppSelector((state) => state.userInfo);
-  const [addServicing] = useAddServicingMutation();
+  const [addServicing, { isLoading }] = useAddServicingMutation();
   const { toast } = useToast();
 
+  useEffect(() => {
+    if (isLoading) {
+      toast({
+        title: 'Adding Product Processing...'
+      });
+    }
+  }, [isLoading, toast]);
 
   // 1. Define your form.
   const form = useForm<z.infer<typeof formSchema>>({
