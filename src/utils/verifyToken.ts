@@ -1,5 +1,10 @@
+import { TUserRole } from '@/types';
 import { jwtDecode } from 'jwt-decode';
 
-export const verifyToken = (token: string) => {
+type TJwtPayload = {
+  email: string,
+  role: TUserRole.superAdmin | TUserRole.seller | TUserRole.buyer
+}
+export const verifyToken = (token: string): TJwtPayload => {
   return jwtDecode(token);
 };
