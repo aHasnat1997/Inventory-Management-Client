@@ -29,6 +29,7 @@ import { Switch } from "@/components/ui/switch";
 import { TUserRole } from "@/types";
 import ProductSale from "./ProductSale";
 import { useNavigate } from "react-router-dom";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 
@@ -293,17 +294,26 @@ export default function ViewProduct({ id, userRole, firstName, lastName, price, 
                   control={form.control}
                   name="condition"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="w-full">
                       <FormLabel>Condition</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="w-full border border-gray-500"
-                          defaultValue={productData?.doc?.condition}
-                          readOnly={!isEdit}
-                        />
-                      </FormControl>
-                      <FormMessage />
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        disabled={!isEdit}
+                      >
+                        <FormControl className="w-full border border-gray-500">
+                          <SelectTrigger>
+                            <SelectValue
+                              className="w-full border border-gray-500"
+                              defaultValue={productData?.doc?.condition}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="new">New</SelectItem>
+                          <SelectItem value="used">Used</SelectItem>
+                        </SelectContent>
+                      </Select>
                     </FormItem>
                   )}
                 />
@@ -311,16 +321,27 @@ export default function ViewProduct({ id, userRole, firstName, lastName, price, 
                   control={form.control}
                   name="availability"
                   render={({ field }) => (
-                    <FormItem>
+                    <FormItem className="w-full border">
                       <FormLabel>Availability</FormLabel>
-                      <FormControl>
-                        <Input
-                          {...field}
-                          className="w-full border border-gray-500"
-                          defaultValue={productData?.doc?.availability}
-                          readOnly={!isEdit}
-                        />
-                      </FormControl>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                        disabled={!isEdit}
+                      >
+                        <FormControl className="w-full border border-gray-500">
+                          <SelectTrigger>
+                            <SelectValue
+                              // {...field}
+                              className="w-full border border-gray-500"
+                              defaultValue={productData?.doc?.availability}
+                            />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectItem value="in-stock">in-stock</SelectItem>
+                          <SelectItem value="up-coming">up-coming</SelectItem>
+                        </SelectContent>
+                      </Select>
                       <FormMessage />
                     </FormItem>
                   )}
