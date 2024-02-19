@@ -94,7 +94,15 @@ export default function AllProducts() {
                       <TableCell>{data?.quantity}</TableCell>
                       <TableCell>$ {data?.price}</TableCell>
                       <TableCell className="w-[13rem] text-right">
-                        <ViewProduct id={data?._id as string} userRole={userRole as string} />
+                        <ViewProduct
+                          id={data?._id as string}
+                          userRole={userRole as string}
+                          userId={userId as string}
+                          firstName={username.firstName as string}
+                          lastName={username.lastName as string}
+                          productName={data?.productName as string}
+                          price={data?.price as number}
+                        />
                         {userRole === TUserRole.buyer ? <ProductSale
                           id={data?._id as string}
                           userId={userId as string}

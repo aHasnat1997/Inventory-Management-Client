@@ -31,8 +31,10 @@ type TPayload = {
   userId: string,
   firstName: string,
   lastName: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  buttonTitle?: any,
 }
-export default function ProductSale({ id, productName, price, userId, firstName, lastName }: TPayload) {
+export default function ProductSale({ id, productName, price, userId, firstName, lastName, buttonTitle = '' }: TPayload) {
   const [productId, setProductId] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [productPrice, setProductPrice] = useState<number>(0);
@@ -98,17 +100,30 @@ export default function ProductSale({ id, productName, price, userId, firstName,
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button
-          variant={'ghost'}
-          className="text-2xl hover:text-white"
-          onClick={() => {
-            setProductId(id);
-            setName(productName);
-            setProductPrice(price as number);
-          }}
-        >
-          <FaDollyFlatbed />
-        </Button>
+        {
+          buttonTitle === '' ?
+            <Button
+              variant={'ghost'}
+              className="text-2xl hover:text-white"
+              onClick={() => {
+                setProductId(id);
+                setName(productName);
+                setProductPrice(price as number);
+              }}
+            >
+              <FaDollyFlatbed />
+            </Button> :
+            <Button
+              onClick={() => {
+                setProductId(id);
+                setName(productName);
+                setProductPrice(price as number);
+              }}
+            >
+              <span>{buttonTitle}</span>
+            </Button>
+        }
+
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

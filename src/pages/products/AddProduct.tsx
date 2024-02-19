@@ -35,6 +35,7 @@ import { Check } from "lucide-react";
 import { useGetAllCategoriesQuery } from "@/redux/features/category/categoryApi";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
 
 
 const formSchema = z.object({
@@ -50,11 +51,13 @@ const formSchema = z.object({
   specification: z.object({}).optional(),
 });
 
+
 export default function AddProduct() {
   const [addProduct, { isLoading }] = useAddProductMutation();
   const { toast } = useToast();
   const { data: categoriesData } = useGetAllCategoriesQuery('');
-  // console.log(categoriesData);
+  const { state } = useLocation();
+  // console.log(state);
 
   useEffect(() => {
     if (isLoading) {
@@ -85,21 +88,21 @@ export default function AddProduct() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      productName: "",
-      price: 0,
-      quantity: 0,
-      category: "",
-      subCategory: "",
-      brand: "",
+      productName: state ? state.doc.productName : '',
+      price: state ? state.doc.price : 0,
+      quantity: state ? state.doc.quantity : 0,
+      category: state ? state.doc.category : '',
+      subCategory: state ? state.doc.subCategory : '',
+      brand: state ? state.doc.brand : '',
       compatibility: [],
-      condition: "",
-      availability: "",
+      condition: state ? state.doc.condition : '',
+      availability: state ? state.doc.availability : '',
     },
   });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+    // console.log(values);
     // const productData: TProduct = {}
     try {
       const result = await addProduct(values);
@@ -329,7 +332,7 @@ export default function AddProduct() {
                               <FormControl>
                                 <Checkbox
                                   className="border-secondary"
-                                  checked={field.value?.includes(item.id)}
+                                  checked={state ? state.doc.compatibility.includes(item.id) : field.value?.includes(item.id)}
                                   onCheckedChange={(checked) => {
                                     return checked
                                       ? field.onChange([...field.value, item.id])

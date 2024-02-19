@@ -27,6 +27,8 @@ import { useEffect, useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { TUserRole } from "@/types";
+import ProductSale from "./ProductSale";
+import { useNavigate } from "react-router-dom";
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 
@@ -43,12 +45,22 @@ const formSchema = z.object({
   specification: z.object({}).optional(),
 });
 
-export default function ViewProduct({ id, userRole }: { id: string, userRole: string }) {
+type TPayload = {
+  id: string,
+  userRole: string
+  productName: string,
+  price: number,
+  userId: string,
+  firstName: string,
+  lastName: string
+}
+export default function ViewProduct({ id, userRole, firstName, lastName, price, productName, userId }: TPayload) {
   const [productId, setProductId] = useState('');
   const { data: productData } = useGetSingleProductsQuery(id);
   const [updateProduct, { isLoading }] = useUpdateProductMutation();
   const { toast } = useToast();
   const [isEdit, setIsEdit] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (isLoading) {
@@ -129,6 +141,13 @@ export default function ViewProduct({ id, userRole }: { id: string, userRole: st
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>View Product</DialogTitle>
+          {
+            userRole !== TUserRole.buyer ?
+              <div className="flex items-center space-x-2">
+                <Switch id="airplane-mode" onClick={() => setIsEdit(!isEdit)} />
+                <Label htmlFor="airplane-mode">Edit Mode</Label>
+              </div> : <></>
+          }
         </DialogHeader>
         <div>
           <Form {...form}>
@@ -309,27 +328,42 @@ export default function ViewProduct({ id, userRole }: { id: string, userRole: st
               </div>
 
               {
-                userRole !== TUserRole.buyer ? <div className="pt-8">
+                <div className="pt-8">
                   <DialogFooter>
-                    <div className="flex items-center space-x-2">
-                      <Switch id="airplane-mode" onClick={() => setIsEdit(!isEdit)} />
-                      <Label htmlFor="airplane-mode">Edit Mode(Want to Update Data)</Label>
-                    </div>
                     <DialogClose asChild>
-                      <Button
-                        type="submit"
-                        disabled={!isEdit}
-                      >
-                        Update
-                      </Button>
+                      {
+                        userRole !== TUserRole.buyer ?
+                          <div className="space-x-4">
+                            <Button
+                              type="submit"
+                              disabled={!isEdit}
+                            >
+                              Update
+                            </Button>
+                            <Button
+                              type="reset"
+                              variant={'secondary'}
+                              onClick={() => navigate('/add-product', { state: productData })}
+                            >
+                              Create Variant
+                            </Button>
+                          </div> :
+                          <ProductSale
+                            id={productId as string}
+                            userId={userId as string}
+                            firstName={firstName as string}
+                            lastName={lastName as string}
+                            productName={productName as string}
+                            price={price as number}
+                            buttonTitle='Order This'
+                          />
+                      }
                     </DialogClose>
                   </DialogFooter>
-                </div> : <></>
+                </div>
               }
-
             </form>
           </Form>
-
         </div>
       </DialogContent>
     </Dialog>
