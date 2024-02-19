@@ -46,7 +46,7 @@ export default function AllServicing() {
                       key={data._id as number}
                     >
                       <TableCell>{data?.servicingPart}</TableCell>
-                      <TableCell>{data?.preferredDate}</TableCell>
+                      <TableCell>{new Date(data?.preferredDate as string).toDateString()}</TableCell>
                       <TableCell>{data?.isServicingDone ? 'Complete' : 'Pending'}</TableCell>
                       <TableCell>{new Date(data?.createdAt as string).toDateString()}</TableCell>
                       <TableCell className="text-right">

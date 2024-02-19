@@ -15,8 +15,11 @@ import ProductsFilter from "@/features/filter/ProductsFilter";
 import ViewProduct from "@/components/ProductModals/ViewProduct";
 import ProductSale from "@/components/ProductModals/ProductSale";
 import DeleteDialog from "@/components/DeleteProduct/DeleteDialog";
+import { useAppSelector } from "@/redux/hooks";
+import { TUserRole } from "@/types";
 
 export default function AllProducts() {
+  const { role: userRole, id: userId, username } = useAppSelector((state) => state.userInfo);
   const [query, setQuery] = useState<string>('');
   const [deleteIds, setDeleteIds] = useState<string[]>([]);
   const { data: productData } = useGetAllProductsQuery(query);
@@ -43,7 +46,7 @@ export default function AllProducts() {
           <h2 className="text-4xl font-semibold italic">All Products</h2>
         </div>
         <div className="flex items-center gap-8">
-          <div className={deleteIds.length === 0 ? 'hidden' : 'block'}>
+          <div className={deleteIds.length === 0 || userRole === TUserRole.buyer ? 'hidden' : 'block'}>
             <DeleteDialog deleteIdArray={deleteIds} emptyArray={setDeleteIds} />
           </div>
           <ProductsFilter setQuery={setQuery} />
@@ -62,7 +65,7 @@ export default function AllProducts() {
                   <TableHead>Availability</TableHead>
                   <TableHead>Quantity</TableHead>
                   <TableHead>Amount</TableHead>
-                  <TableHead className="w-[13rem] text-center">Action</TableHead>
+                  <TableHead></TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -87,13 +90,16 @@ export default function AllProducts() {
                     <TableCell>{data?.availability}</TableCell>
                     <TableCell>{data?.quantity}</TableCell>
                     <TableCell>$ {data?.price}</TableCell>
-                    <TableCell className="w-[13rem] text-center">
-                      <ViewProduct id={data?._id as string} />
-                      <ProductSale
+                    <TableCell className="w-[13rem] text-right">
+                      <ViewProduct id={data?._id as string} userRole={userRole as string} />
+                      {userRole === TUserRole.buyer ? <ProductSale
                         id={data?._id as string}
+                        userId={userId as string}
+                        firstName={username.firstName as string}
+                        lastName={username.lastName as string}
                         productName={data?.productName as string}
                         price={data?.price as number}
-                      />
+                      /> : <></>}
                     </TableCell>
                   </TableRow>)
                 }

@@ -26,6 +26,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useState } from "react";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
+import { TUserRole } from "@/types";
 // import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../ui/select";
 
 
@@ -42,7 +43,7 @@ const formSchema = z.object({
   specification: z.object({}).optional(),
 });
 
-export default function ViewProduct({ id }: { id: string }) {
+export default function ViewProduct({ id, userRole }: { id: string, userRole: string }) {
   const [productId, setProductId] = useState('');
   const { data: productData } = useGetSingleProductsQuery(id);
   const [updateProduct] = useUpdateProductMutation();
@@ -297,44 +298,27 @@ export default function ViewProduct({ id }: { id: string }) {
                     </FormItem>
                   )}
                 />
-                {/* <FormField
-                  control={form.control}
-                  name="availability"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>Availability</FormLabel>
-                      <Select onValueChange={field.onChange} defaultValue={field.value}>
-                        <FormControl className="w-full border border-gray-500">
-                          <SelectTrigger>
-                            <SelectValue placeholder="Select Condition" defaultValue={productData?.doc?.availability} />
-                          </SelectTrigger>
-                        </FormControl>
-                        <SelectContent>
-                          <SelectItem value="in-stock">in-stock</SelectItem>
-                          <SelectItem value="up-coming">up-coming</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormItem>
-                  )}
-                /> */}
               </div>
 
-              <div className="pt-8">
-                <DialogFooter>
-                  <div className="flex items-center space-x-2">
-                    <Switch id="airplane-mode" onClick={() => setIsEdit(!isEdit)} />
-                    <Label htmlFor="airplane-mode">Edit Mode(Want to Update Data)</Label>
-                  </div>
-                  <DialogClose asChild>
-                    <Button
-                      type="submit"
-                      disabled={!isEdit}
-                    >
-                      Update
-                    </Button>
-                  </DialogClose>
-                </DialogFooter>
-              </div>
+              {
+                userRole !== TUserRole.buyer ? <div className="pt-8">
+                  <DialogFooter>
+                    <div className="flex items-center space-x-2">
+                      <Switch id="airplane-mode" onClick={() => setIsEdit(!isEdit)} />
+                      <Label htmlFor="airplane-mode">Edit Mode(Want to Update Data)</Label>
+                    </div>
+                    <DialogClose asChild>
+                      <Button
+                        type="submit"
+                        disabled={!isEdit}
+                      >
+                        Update
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </div> : <></>
+              }
+
             </form>
           </Form>
 

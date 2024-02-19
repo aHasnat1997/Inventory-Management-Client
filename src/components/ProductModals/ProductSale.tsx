@@ -18,25 +18,39 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FaDollyFlatbed } from "react-icons/fa";
 import { useToast } from "../ui/use-toast";
 import { useForm } from "react-hook-form";
 import { useAddSaleMutation } from "@/redux/features/sales/salesApi";
 
-
-export default function ProductSale({ id, productName, price }: { id: string, productName: string, price: number }) {
+type TPayload = {
+  id: string,
+  productName: string,
+  price: number,
+  userId: string,
+  firstName: string,
+  lastName: string
+}
+export default function ProductSale({ id, productName, price, userId, firstName, lastName }: TPayload) {
   const [productId, setProductId] = useState<string>('');
   const [name, setName] = useState<string>('');
   const [productPrice, setProductPrice] = useState<number>(0);
-  const [saleProduct] = useAddSaleMutation()
+  const [saleProduct, { isLoading }] = useAddSaleMutation()
   const { toast } = useToast();
 
+  useEffect(() => {
+    if (isLoading) {
+      toast({
+        title: 'Order Processing...'
+      });
+    }
+  }, [isLoading, toast])
 
   const form = useForm({
     defaultValues: {
       productName: name,
-      buyerName: '',
+      buyerName: `${firstName} ${lastName}`,
       quantity: 1,
       price: productPrice
     },
@@ -45,6 +59,7 @@ export default function ProductSale({ id, productName, price }: { id: string, pr
   async function onSubmit(values: Record<string, unknown>) {
     const saleData = {
       productId: productId,
+      userId,
       productName: name,
       price: productPrice,
       quantity: values.quantity,
@@ -97,9 +112,9 @@ export default function ProductSale({ id, productName, price }: { id: string, pr
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
-          <DialogTitle>Sale this Product</DialogTitle>
+          <DialogTitle>Order this Product</DialogTitle>
           <DialogDescription>
-            Make your sale here. Click sale when you're done.
+            Make your order here. Select Quantity and click order when you're done.
           </DialogDescription>
         </DialogHeader>
 
@@ -136,8 +151,10 @@ export default function ProductSale({ id, productName, price }: { id: string, pr
                     <FormControl>
                       <Input
                         {...field}
-                        className="w-full border border-gray-500"
+                        className="w-full border border-gray-500 text-gray-500"
                         placeholder="Name of buyer"
+                        readOnly={true}
+                        value={`${firstName} ${lastName}`}
                       />
                     </FormControl>
                     <FormMessage />
@@ -190,7 +207,7 @@ export default function ProductSale({ id, productName, price }: { id: string, pr
                     <Button
                       type="submit"
                     >
-                      Sale
+                      Order
                     </Button>
                   </DialogClose>
                 </DialogFooter>
