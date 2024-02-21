@@ -5,7 +5,7 @@ This project is a Computer Store Management Dashboard Client aimed at providing 
 ## Features
 
 ### 1. Authentication
-- **User Registration and Login**: Users must register and log in to access the dashboard. JWT (JSON Web Tokens) are used for secure authentication. For now, there will be a single role, essentially a user responsible for managing the system.
+- **User Registration and Login**: Users must register and log in to access the dashboard. JWT (JSON Web Tokens) are used for secure authentication. For now, there has two roles, "buyer" and "seller," to facilitate different functionalities based on user roles
 
 ### 2. Functionality
 - **CRUD Operations**: Users can perform CRUD operations on computer items in the inventory.
@@ -19,7 +19,11 @@ This project is a Computer Store Management Dashboard Client aimed at providing 
 ### 3. Sales Management
 - **Create Sale**: Users can create sales transactions, providing details such as quantity, buyer name, product name, price, and sale date. If the quantity reaches zero, the product will be automatically removed from the inventory.
 
-### 4. Comprehensive Computer Items Filter System
+### 4. Purchase Management:
+- Users can purchase computer items from the inventory.
+- They can buy any amount of computer items.
+
+### 5. Comprehensive Computer Items Filter System
 - **Category Filter**: Allow users to set a filter for specific computer item categories (e.g., monitors, RAM, graphics cards).
 - **Brand Filter**: Implement a real-time search functionality for computer item brands.
 - **Compatibility Filter**: Enable searching by compatibility with different systems (e.g., Windows, Mac).
@@ -29,13 +33,16 @@ This project is a Computer Store Management Dashboard Client aimed at providing 
 - **Capacity Filter**: Include a filter for items with varying capacities (e.g., storage capacity for hard drives).
 - **Additional Relevant Filter Parameters**: Introduce other relevant filter parameters such as color, form factor, or any custom attributes associated with the computer items.
 
-### 5. User Interface Features
+### 6. User Interface Features
 - **Real-time UI Updates**: Gracefully update the UI in real-time when changes occur (e.g., product updates, sales, etc.).
 - **Efficient CRUD Operations**: Utilize RTK Query for efficient CRUD operations.
 - **Re-fetching Functionality**: Implement Re-fetching functionality to ensure data accuracy and consistency.
 
-### 6. State Management
+### 7. State Management
 - **Redux**: Utilize Redux for state management to maintain a consistent application state.
+
+### 8. Create Variant
+- In the product list has a button. Upon clicking this button, seller will be redirected to a form where product data is pre-filled. Seller can then make modifications as needed to create a new product based on the existing one.
 
 ## Tools Used
 - React
