@@ -16,17 +16,18 @@ import { Link, useNavigate } from "react-router-dom";
 import { useAppDispatch } from "@/redux/hooks";
 import { setUser } from "@/redux/features/auth/authSlice";
 import { useToast } from "@/components/ui/use-toast";
+import { useState } from "react";
 
 const formSchema = z.object({
-  email: z.string().min(1, {
-    message: "Email is empty",
-  }).email('Input valid email'),
-  password: z.string().min(8, {
-    message: "Password must 8",
-  }),
+  email: z.string().optional(),
+  password: z.string().optional()
 });
 
 export default function LoginFrom() {
+  const [email, setEmail] = useState<string | null>(null);
+  const [password, setPassword] = useState<string | null>(null);
+  // console.log({ email, password });
+
   const [loginUser] = useLoginMutation();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
@@ -36,17 +37,25 @@ export default function LoginFrom() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      email: "",
-      password: ""
+      email: email ? email : "",
+      password: password ? password : ""
     },
-  })
+  });
 
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    try {
-      const result = await loginUser(values);
-      // console.log('', result);
+    let loginData = {};
+    if (email && password) {
+      loginData = {
+        email,
+        password
+      }
+    } else {
+      loginData = values
+    }
 
+    try {
+      const result = await loginUser(loginData);
       if ('data' in result) {
         const info = result.data.doc;
         dispatch(setUser({
@@ -101,7 +110,11 @@ export default function LoginFrom() {
                 <FormItem>
                   <FormLabel className="text-white">Email</FormLabel>
                   <FormControl>
-                    <Input placeholder="Jon Do" {...field} />
+                    <Input
+                      className={email ? 'placeholder:text-stone-950' : ''}
+                      placeholder={email ? email : "your@email.com"}
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -114,7 +127,12 @@ export default function LoginFrom() {
                 <FormItem>
                   <FormLabel className="text-white">Password</FormLabel>
                   <FormControl>
-                    <Input type="password" placeholder="***************" {...field} />
+                    <Input
+                      type="password"
+                      className={password ? 'placeholder:text-stone-950' : ''}
+                      placeholder="********"
+                      {...field}
+                    />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -141,6 +159,29 @@ export default function LoginFrom() {
             Register
           </Link>
         </h2>
+      </div>
+      <div className="mt-6 border-t px-8">
+        <h2 className="text-white text-center mt-4">
+          Want to test system? Here, is cardinal for login.
+        </h2>
+        <div className="mt-4 flex items-center justify-center gap-4">
+          <Button
+            onClick={() => {
+              setEmail('alex.1@email.com')
+              setPassword('password123')
+            }}
+          >
+            Login as Seller
+          </Button>
+          <Button
+            onClick={() => {
+              setEmail('john.1@email.com')
+              setPassword('password123')
+            }}
+          >
+            Login as Buyer
+          </Button>
+        </div>
       </div>
     </section>
   )
